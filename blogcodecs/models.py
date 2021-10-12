@@ -73,3 +73,10 @@ class contactQueries(models.Model):
 
     def __str__(self):
         return self.name+ " - " + self.subject + ' - '+self.message
+
+
+class analytics(models.Model):
+    id = models.AutoField(primary_key=True)
+    ip_address = models.CharField(max_length=100)
+    blog = models.ForeignKey('blogs',on_delete=models.CASCADE)
+    

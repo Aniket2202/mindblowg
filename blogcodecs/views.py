@@ -52,13 +52,22 @@ def categoryView(request,id):
 def blogView(request,id):
     blogObject = blogs.objects.get(id=id)
     categories = category.objects.all()[:7]
-    
+    print(request.META.get("REMOTE_ADDR"))
     print(comments.objects.filter(post=blogObject))
     print(blogObject)
+    if analytics.objects.filter(ip_address=request.META.get("REMOTE_ADDR"),blog = blogObject).exists():
+        pass
+    else:
+        anal = analytics(
+            ip_address = request.META.get('REMOTE_ADDR'),
+            blog = blogObject
+        ).save()
+         
     context = {
         'blog':blogObject,
         'categories':categories,
-        'comments':comments.objects.filter(post=blogObject)
+        'comments':comments.objects.filter(post=blogObject),
+        'analytics':analytics.objects.filter(blog=blogObject).count()
     }
     return render(request,'single.html',context)
 
